@@ -1,9 +1,9 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   ManyToMany,
   JoinTable,
+  Column,
 } from 'typeorm';
 import { Right } from './right.entity';
 
