@@ -8,4 +8,8 @@ export class AuthDto {
   @MinLength(8)
   @MaxLength(32)
   password: string;
+
+  firstName: string;
+
+  lastName: string;
 }

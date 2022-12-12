@@ -1,0 +1,7 @@
+<button tuiButton (click)="updateUsers()">Update users</button>
+
+<ul class="tui-list">
+  <li *ngFor="let user of users | async" class="tui-list__item">
+    {{ user.username }}
+  </li>
+</ul>

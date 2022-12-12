@@ -1,0 +1,9 @@
+<button tuiButton (click)="updateApplications()">Update applications</button>
+
+<ul class="tui-list">
+  <li *ngFor="let application of applications$ | async">
+    {{ application.id }}
+  </li>
+</ul>
+
+<h1 *ngIf="(applications$ | async)?.length === 0">Applications not found</h1>

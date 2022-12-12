@@ -1,7 +1,10 @@
-<tui-root style="padding: 16px">
-  <nav>
-    <a routerLink="/auth" tuiLink>auth</a>
-    <a routerLink="/employee" tuiLink>employee</a>
+<tui-root style="padding: 0px 16px">
+  <nav *ngIf="isAuth$ | async" tuiGroup [collapsed]="false" [rounded]="true">
+    <button tuiButton routerLink="/applications">Applications</button>
+    <button tuiButton routerLink="/users">Users</button>
+    <button tuiButton routerLink="/projects">Projects</button>
+    <button tuiButton routerLink="/auth" (click)="logout()">logout</button>
   </nav>
+
   <router-outlet></router-outlet>
 </tui-root>

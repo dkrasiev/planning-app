@@ -7,23 +7,52 @@ import { User } from 'src/database/entities/user.entity';
 
 @Injectable()
 export class TokenService {
+  private get accessSecret(): string {
+    return process.env['JWT_ACCESS_SECRET'];
+  }
+
+  private get refreshSecret(): string {
+    return process.env['JWT_REFRESH_SECRET'];
+  }
+
   constructor(@InjectRepository(User) private users: Repository<User>) {}
 
-  public async generateAndSaveToken(user: User, data: string) {
-    const tokens = this.generate(data);
-    await this.save(user.uid, tokens.refresh);
+  public async generateAndSaveTokens(uid: string) {
+    const tokens = this.generate(uid);
+    await this.save(uid, tokens.refreshToken);
 
     return tokens;
   }
 
-  private generate(data: string) {
-    const accessSecret = process.env['JWT_ACCESS_SECRET'];
-    const refreshSecret = process.env['JWT_REFRESH_SECRET'];
+  public validateAccessToken(token: string) {
+    return this.validateToken(token, this.accessSecret);
+  }
 
-    const access = jwt.sign(data, accessSecret);
-    const refresh = jwt.sign(data, refreshSecret);
+  public validateRefreshToken(refreshToken: string) {
+    return this.validateToken(refreshToken, this.refreshSecret);
+  }
 
-    return { access, refresh };
+  public validateAndUpdateRefreshToken(refreshToken: string) {
+    const isValid = !!this.validateRefreshToken(refreshToken);
+
+    return isValid;
+  }
+
+  private validateToken(token: string, secret: string): string {
+    const uid = jwt.verify(token, secret);
+
+    if (typeof uid !== 'string') {
+      throw new Error();
+    }
+
+    return uid;
+  }
+
+  private generate(data: any) {
+    const token = jwt.sign(data, this.accessSecret);
+    const refreshToken = jwt.sign(data, this.refreshSecret);
+
+    return { token, refreshToken };
   }
 
   private async save(uid: string, refreshToken: string): Promise<void> {

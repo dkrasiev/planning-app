@@ -1,39 +1,47 @@
 import {
   Body,
   Controller,
-  Delete,
+  ForbiddenException,
+  Get,
   HttpException,
-  HttpStatus,
+  InternalServerErrorException,
   Post,
+  Req,
+  Res,
 } from '@nestjs/common';
+import { CookieOptions, Request, Response } from 'express';
 
 import { AuthDto } from './dtos/user.dto';
 import { AuthService } from './services/auth.service';
 
 @Controller('auth')
 export class AuthController {
+  private cookieOptions: CookieOptions = {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    domain: process.env.URL,
+    httpOnly: true,
+  };
+  private refreshTokenKey = 'refreshToken';
+
   constructor(private authService: AuthService) {}
 
-  @Delete()
-  async delete(@Body() userDto: AuthDto) {
-    return await this.authService.delete(userDto);
-  }
-
   @Post('login')
-  async login(@Body() userDto: AuthDto) {
+  async login(
+    @Body() userDto: AuthDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     try {
-      const data = await this.authService.login(userDto);
+      const { token, refreshToken, user } = await this.authService.login(
+        userDto,
+      );
 
-      const safeUser = data.user.getSafeUser();
+      response.cookie(this.refreshTokenKey, refreshToken, this.cookieOptions);
 
-      return { ...data, user: safeUser };
+      return { token, user };
     } catch (e) {
       if (e instanceof HttpException) throw e;
 
-      throw new HttpException(
-        'Internal Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new InternalServerErrorException();
     }
   }
 
@@ -42,14 +50,31 @@ export class AuthController {
     try {
       const user = await this.authService.register(userDto);
 
-      return user.getSafeUser();
+      return { result: !!user };
     } catch (e) {
       if (e instanceof HttpException) throw e;
 
-      throw new HttpException(
-        'Internal Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Get('refresh')
+  async refresh(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    try {
+      const tokenFromCookie = request.cookies.refreshToken;
+
+      const { refreshToken, token, user } = await this.authService.refresh(
+        tokenFromCookie,
       );
+
+      response.cookie(this.refreshTokenKey, refreshToken, this.cookieOptions);
+
+      return { token, user };
+    } catch (e) {
+      throw new ForbiddenException();
     }
   }
 }

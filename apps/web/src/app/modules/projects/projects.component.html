@@ -1,0 +1,32 @@
+<div class="list">
+  <button tuiButton (click)="updateProjects()">Update projects</button>
+
+  <div>
+    <app-project-form (create)="updateProjects()"></app-project-form>
+  </div>
+
+  <h1 *ngIf="(projects$ | async)?.length === 0">Projects not found</h1>
+
+  <ul class="tui-list">
+    <li *ngFor="let project of projects$ | async" class="tui-list__item">
+      <h3
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        "
+      >
+        {{ project.shortTitle }}
+        <button
+          tuiButton
+          size="s"
+          appearance="secondary-destructive"
+          style="margin-left: 8px"
+        >
+          delete
+        </button>
+      </h3>
+      <p>{{ project.fullTitle }}</p>
+    </li>
+  </ul>
+</div>
