@@ -9,23 +9,19 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  async all() {
-    try {
-      return await this.userService.getAll();
-    } catch (e) {}
+  async find() {
+    return await this.userService.getAll();
   }
 
-  @Get(':uid')
-  async byId(@Param('uid') uid: string) {
-    try {
-      return await this.userService.getById(uid);
-    } catch (e) {}
+  @Get(':username')
+  async findOneById(@Param('username') username: string) {
+    const user = await this.userService.getByUsername(username);
+
+    return user;
   }
 
   @Delete(':uid')
   async deleteById(@Param('uid') uid: string) {
-    try {
-      return await this.userService.deleteById(uid);
-    } catch (e) {}
+    return await this.userService.deleteById(uid);
   }
 }

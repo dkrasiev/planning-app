@@ -13,7 +13,7 @@ export class ApplicationsComponent {
 
   constructor(private applicationsService: ApplicationsService) {}
 
-  public updateApplications() {
-    this.applicationsService.update$().subscribe();
+  public update() {
+    this.applicationsService.update();
   }
 }

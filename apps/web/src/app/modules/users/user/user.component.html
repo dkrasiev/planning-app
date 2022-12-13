@@ -1,0 +1,18 @@
+<ng-container *ngIf="isLoading; else loaded">
+  <h1>Loading...</h1>
+</ng-container>
+
+<ng-template #loaded>
+  <div *ngIf="user; else notFound" class="user">
+    <h1 class="user__title">{{ user.username }}</h1>
+    <p>email: {{ user.email || "none" }}</p>
+    <p>role: {{ user.role.name || "none" }}</p>
+    <p>department: {{ user.department?.name || "none" }}</p>
+    <p>grade: {{ user.grade?.name || "none" }}</p>
+    <p>skills: {{ userSkills }}</p>
+  </div>
+
+  <ng-template #notFound>
+    <h1>User not found</h1>
+  </ng-template>
+</ng-template>

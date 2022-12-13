@@ -10,18 +10,36 @@ export class UserService {
   public async getAll() {
     const users = await this.users.find();
 
-    return users.map((user) => user.getSafeUser());
+    return await Promise.all(users.map((user) => this.getSafeUser(user.uid)));
   }
 
   public async getById(uid: string) {
-    const user = await this.users.findOne({ where: { uid } });
+    return await this.getSafeUser(uid);
+  }
 
-    return user.getSafeUser();
+  public async getByUsername(username: string) {
+    const user = await this.users.findOne({ where: { username } });
+
+    return await this.getSafeUser(user.uid);
   }
 
   public async deleteById(uid: string): Promise<{ result: boolean }> {
     const result = await this.users.delete(uid);
 
     return { result: result.affected > 0 };
+  }
+
+  private async getSafeUser(uid: string) {
+    const userWithRelations = await this.users.findOne({
+      where: { uid },
+      relations: {
+        department: true,
+        grade: true,
+        skills: true,
+        role: true,
+      },
+    });
+
+    return userWithRelations;
   }
 }

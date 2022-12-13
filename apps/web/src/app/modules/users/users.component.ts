@@ -16,13 +16,13 @@ interface User {
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent {
-  public users$: Observable<User[]> = new Observable();
+  public users$ = this.usersService.users$;
 
   constructor(private usersService: UsersService) {
-    this.updateUsers();
+    this.update();
   }
 
-  public updateUsers() {
-    this.users$ = this.usersService.getAll();
+  public update() {
+    this.usersService.update();
   }
 }

@@ -78,8 +78,6 @@ export class AuthService {
   }
 
   private saveToken(token: string) {
-    console.log(token);
-
     localStorage.setItem(environment.ACCESS_TOKEN_KEY, token);
   }
 }

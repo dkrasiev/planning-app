@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
 
@@ -7,11 +8,19 @@ import { User } from '../interfaces/user';
   providedIn: 'root',
 })
 export class UsersService {
+  public users$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+
   private apiUrl: string = environment.apiUrl + '/users';
 
   constructor(private http: HttpClient) {}
 
-  public getAll() {
-    return this.http.get<User[]>(this.apiUrl);
+  public update() {
+    this.http
+      .get<User[]>(this.apiUrl)
+      .subscribe((users) => this.users$.next(users));
+  }
+
+  public getUser$(id: string) {
+    return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 }

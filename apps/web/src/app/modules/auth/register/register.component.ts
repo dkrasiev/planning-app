@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
-import { catchError } from 'rxjs';
+
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -36,7 +36,6 @@ export class RegisterComponent {
         .subscribe({
           next: () => this.router.navigate(['../', 'login']),
           error: (e) => {
-            console.log(e);
             this.alertService
               .open(e.error.message, { status: TuiNotification.Error })
               .subscribe();

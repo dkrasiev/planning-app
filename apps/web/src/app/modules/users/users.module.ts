@@ -1,19 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TuiButtonModule } from '@taiga-ui/core';
-import { RouterModule, Routes } from '@angular/router';
+import { TuiButtonModule, TuiLinkModule } from '@taiga-ui/core';
+import { RouterModule } from '@angular/router';
 
 import { UsersComponent } from './users.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: UsersComponent,
-  },
-];
+import { UserComponent } from './user/user.component';
 
 @NgModule({
-  declarations: [UsersComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), TuiButtonModule],
+  declarations: [UsersComponent, UserComponent],
+  imports: [
+    CommonModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        component: UsersComponent,
+      },
+      {
+        path: ':id',
+        component: UserComponent,
+      },
+    ]),
+
+    TuiButtonModule,
+    TuiLinkModule,
+  ],
 })
 export class UsersModule {}

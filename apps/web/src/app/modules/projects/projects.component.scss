@@ -1,3 +1,10 @@
-.list > * {
-  margin-bottom: 16px;
+:host > * {
+  margin-bottom: 1rem;
+}
+
+.project {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
 }

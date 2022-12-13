@@ -1,7 +1,7 @@
-<button tuiButton (click)="updateUsers()">Update users</button>
+<button tuiButton (click)="update()">Update</button>
 
 <ul *ngIf="users$ | async as users" class="tui-list">
-  <li *ngFor="let user of users" class="tui-list__item">
-    {{ user.username }}
+  <li *ngFor="let user of users" class="tui-list__item user">
+    <a tuiLink [routerLink]="user.username">{{ user.username }}</a>
   </li>
 </ul>

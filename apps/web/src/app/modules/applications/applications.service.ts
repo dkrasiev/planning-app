@@ -27,18 +27,16 @@ export class ApplicationsService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  public update$() {
-    return this.http.get<Application[]>(this.apiUrl).pipe(
-      tap((applications) => {
-        this.applications$.next(applications);
-      })
-    );
+  public update() {
+    this.http
+      .get<Application[]>(this.apiUrl)
+      .subscribe((applications) => this.applications$.next(applications));
   }
 
   public create$(newApplication: NewApplication) {
     return this.authService.user$.pipe(
       switchMap((user) => {
-        const creatorId = user?.uid;
+        const creatorId = user?.id;
 
         return this.http.post(this.apiUrl, { ...newApplication, creatorId });
       })
