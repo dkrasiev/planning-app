@@ -1,8 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { AuthService } from './services/auth.service';
+
+interface Route {
+  title: string;
+  path?: string;
+  handler?: Function;
+}
 
 @Component({
   selector: 'app-root',
@@ -14,9 +20,30 @@ export class AppComponent {
     map((user) => !!user)
   );
 
-  constructor(private authService: AuthService) {}
+  public routes: Route[] = [
+    {
+      path: '/applications',
+      title: 'Applications',
+    },
+    {
+      path: '/projects',
+      title: 'Projects',
+    },
+    {
+      path: '/users',
+      title: 'Users',
+    },
+    {
+      title: 'Logout',
+      handler: () => this.logout(),
+    },
+  ];
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   public logout() {
     this.authService.logout();
+
+    this.router.navigate(['auth']);
   }
 }

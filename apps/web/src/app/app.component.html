@@ -1,9 +1,13 @@
 <tui-root style="padding: 0px 16px">
   <nav *ngIf="isAuth$ | async" tuiGroup [collapsed]="false" [rounded]="true">
-    <button tuiButton routerLink="/applications">Applications</button>
-    <button tuiButton routerLink="/users">Users</button>
-    <button tuiButton routerLink="/projects">Projects</button>
-    <button tuiButton routerLink="/auth" (click)="logout()">logout</button>
+    <button
+      *ngFor="let route of routes"
+      tuiButton
+      [routerLink]="route.path"
+      (click)="route?.handler()"
+    >
+      {{ route.title }}
+    </button>
   </nav>
 
   <router-outlet></router-outlet>

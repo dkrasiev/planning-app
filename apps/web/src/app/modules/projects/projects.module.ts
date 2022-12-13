@@ -7,6 +7,7 @@ import {
   TuiAlertModule,
   TuiButtonModule,
   TuiGroupModule,
+  TuiSvgModule,
 } from '@taiga-ui/core';
 import { ProjectFormComponent } from './project-form/project-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,6 +24,7 @@ import { TuiInputModule } from '@taiga-ui/kit';
     TuiGroupModule,
     TuiInputModule,
     TuiAlertModule,
+    TuiSvgModule,
   ],
 })
 export class ProjectsModule {}
