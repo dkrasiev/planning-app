@@ -32,7 +32,9 @@ export class ProjectFormComponent {
         },
         error: () => {
           this.alertService
-            .open('Error!', { status: TuiNotification.Error })
+            .open('Project with this title already exists!', {
+              status: TuiNotification.Error,
+            })
             .subscribe();
         },
       });

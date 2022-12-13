@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -23,28 +24,21 @@ export class ProjectsController {
 
   @Get()
   async getAll() {
-    try {
-      return await this.projectsService.getAll();
-    } catch (e) {
-      throw e;
-    }
+    return await this.projectsService.getAll();
   }
 
   @Get(':id')
   async getById(@Param('id', ParseIntPipe) id: number) {
-    try {
-      return await this.projectsService.getById(id);
-    } catch (e) {
-      throw e;
-    }
+    return await this.projectsService.getById(id);
   }
 
   @Post()
   async create(@Body() body: CreateProjectPayload) {
-    try {
-      return await this.projectsService.create(body);
-    } catch (e) {
-      throw e;
-    }
+    return await this.projectsService.create(body);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.projectsService.delete(id);
   }
 }

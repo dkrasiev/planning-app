@@ -1,8 +1,8 @@
 <div class="list">
-  <button tuiButton (click)="updateProjects()">Update projects</button>
+  <button tuiButton (click)="loadProjects()">Update projects</button>
 
   <div>
-    <app-project-form (create)="updateProjects()"></app-project-form>
+    <app-project-form (create)="loadProjects()"></app-project-form>
   </div>
 
   <h1 *ngIf="(projects$ | async)?.length === 0">Projects not found</h1>
@@ -22,6 +22,7 @@
           size="s"
           appearance="secondary-destructive"
           style="margin-left: 8px"
+          (click)="onDelete(project.id)"
         >
           delete
         </button>

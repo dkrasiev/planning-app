@@ -13,10 +13,14 @@ export class ProjectsComponent implements OnInit {
   constructor(private projectService: ProjectsService) {}
 
   ngOnInit(): void {
-    this.updateProjects();
+    this.loadProjects();
   }
 
-  public updateProjects() {
-    this.projectService.getAll$().subscribe(console.log);
+  public loadProjects() {
+    this.projectService.update();
+  }
+
+  public onDelete(id: string | number) {
+    this.projectService.delete$(id).subscribe(() => this.loadProjects());
   }
 }

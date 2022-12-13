@@ -29,6 +29,17 @@ export class ProjectsService {
     );
   }
 
+  public update() {
+    this.http
+      .get<Project[]>(this.apiUrl)
+      .pipe(
+        tap((projects) => {
+          this.projects$.next(projects);
+        })
+      )
+      .subscribe();
+  }
+
   public create$({
     shortTitle,
     fullTitle,
@@ -37,5 +48,9 @@ export class ProjectsService {
     fullTitle: string;
   }) {
     return this.http.post<Project>(this.apiUrl, { shortTitle, fullTitle });
+  }
+
+  public delete$(id: string | number) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }
