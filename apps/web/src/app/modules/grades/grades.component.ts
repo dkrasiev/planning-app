@@ -1,15 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 
+import { GradesService } from './grades.service';
+
 @Component({
   selector: 'app-grades',
   templateUrl: './grades.component.html',
-  styleUrls: ['./grades.component.scss']
+  styleUrls: ['./grades.component.scss'],
 })
 export class GradesComponent implements OnInit {
+  public grades$ = this.gradesService.grades$;
 
-  constructor() { }
+  constructor(private gradesService: GradesService) {}
 
-  ngOnInit(): void {
+  public ngOnInit() {
+    this.update;
   }
 
+  public update() {
+    this.gradesService.update();
+  }
+
+  public onDelete(id: number) {
+    this.gradesService.delete$(id).subscribe(() => this.update());
+  }
 }

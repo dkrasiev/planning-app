@@ -1,1 +1,30 @@
-<p>grades works!</p>
+<button tuiButton (click)="update()">Update</button>
+
+<div>
+  <app-grade-form (create)="update()"></app-grade-form>
+</div>
+
+<ng-container *ngIf="grades$ | async as grades">
+  <ul *ngIf="grades.length > 0; else notFound" class="tui-list">
+    <li *ngFor="let grade of grades" class="tui-list__item grade">
+      <div class="grade__header">
+        <h3 class="grade__title">
+          {{ grade.name }}
+        </h3>
+
+        <button
+          tuiButton
+          size="s"
+          appearance="secondary-destructive"
+          (click)="onDelete(grade.id)"
+        >
+          delete
+        </button>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #notFound>
+    <h1>No grades created</h1>
+  </ng-template>
+</ng-container>

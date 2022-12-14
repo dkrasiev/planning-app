@@ -1,0 +1,10 @@
+:host > * {
+  margin-bottom: 1rem;
+}
+
+.grade {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+}
