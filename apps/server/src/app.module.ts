@@ -8,6 +8,9 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { ProjectsModule } from './projects/projects.module';
+import { SkillsModule } from './skills/skills.module';
+import { GradesModule } from './grades/grades.module';
+import { DepartmentsModule } from './departments/departments.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { ProjectsModule } from './projects/projects.module';
     ApplicationsModule,
     ApplicationsModule,
     ProjectsModule,
+    SkillsModule,
+    GradesModule,
+    DepartmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
