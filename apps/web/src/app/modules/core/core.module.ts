@@ -1,42 +1,43 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TuiGroupModule } from '@taiga-ui/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'users',
-    loadChildren: () =>
-      import('../users/users.module').then((m) => m.UsersModule),
-  },
-  {
     path: 'applications',
     loadChildren: () =>
-      import('../applications/applications.module').then(
+      import('./modules/applications/applications.module').then(
         (m) => m.ApplicationsModule
       ),
   },
   {
+    path: 'users',
+    loadChildren: () =>
+      import('./modules/users/users.module').then((m) => m.UsersModule),
+  },
+  {
     path: 'projects',
     loadChildren: () =>
-      import('../projects/projects.module').then((m) => m.ProjectsModule),
+      import('./modules/projects/projects.module').then(
+        (m) => m.ProjectsModule
+      ),
   },
   {
     path: 'departments',
     loadChildren: () =>
-      import('../departments/departments.module').then(
+      import('./modules/departments/departments.module').then(
         (m) => m.DepartmentsModule
       ),
   },
   {
     path: 'skills',
     loadChildren: () =>
-      import('../skills/skills.module').then((m) => m.SkillsModule),
+      import('./modules/skills/skills.module').then((m) => m.SkillsModule),
   },
   {
     path: 'grades',
     loadChildren: () =>
-      import('../grades/grades.module').then((m) => m.GradesModule),
+      import('./modules/grades/grades.module').then((m) => m.GradesModule),
   },
   {
     path: '**',
