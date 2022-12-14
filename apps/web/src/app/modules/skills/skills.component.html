@@ -1,0 +1,30 @@
+<button tuiButton (click)="update()">Update</button>
+
+<div>
+  <app-skill-form (create)="update()"></app-skill-form>
+</div>
+
+<ng-container *ngIf="skills$ | async as skills">
+  <ul *ngIf="skills.length > 0; else notFound" class="tui-list">
+    <li *ngFor="let skill of skills" class="tui-list__item skill">
+      <div class="skill__header">
+        <h3 class="skill__title">
+          {{ skill.name }}
+        </h3>
+
+        <button
+          tuiButton
+          size="s"
+          appearance="secondary-destructive"
+          (click)="onDelete(skill.id)"
+        >
+          delete
+        </button>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #notFound>
+    <h1>No skills created</h1>
+  </ng-template>
+</ng-container>

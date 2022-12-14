@@ -34,6 +34,18 @@ export class AppComponent {
       title: 'Users',
     },
     {
+      path: '/grades',
+      title: 'Grades',
+    },
+    {
+      path: '/skills',
+      title: 'Skills',
+    },
+    {
+      path: '/departments',
+      title: 'Departments',
+    },
+    {
       title: 'Logout',
       handler: () => this.logout(),
     },

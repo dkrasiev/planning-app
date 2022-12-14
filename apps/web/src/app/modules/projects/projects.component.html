@@ -6,10 +6,7 @@
 
 <ng-container *ngIf="projects$ | async as projects">
   <ul *ngIf="projects.length > 0; else notFound" class="tui-list">
-    <li
-      *ngFor="let project of projects$ | async"
-      class="tui-list__item project"
-    >
+    <li *ngFor="let project of projects" class="tui-list__item project">
       <div class="project__header">
         <h3 class="project__title">
           {{ project.shortTitle }}
@@ -29,6 +26,6 @@
   </ul>
 
   <ng-template #notFound>
-    <h1 *ngIf="(projects$ | async)?.length === 0">Projects not found</h1>
+    <h1>No projects created</h1>
   </ng-template>
 </ng-container>

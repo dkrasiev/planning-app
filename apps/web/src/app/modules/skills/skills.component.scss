@@ -1,0 +1,10 @@
+:host > * {
+  margin-bottom: 1rem;
+}
+
+.skill {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+}
