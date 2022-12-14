@@ -1,9 +1,4 @@
-<form
-  tuiGroup
-  [formGroup]="projectForm"
-  orientation="horizontal"
-  (submit)="createProject()"
->
+<form [formGroup]="projectForm" (submit)="createProject()">
   <tui-input formControlName="fullTitle">Full title</tui-input>
   <tui-input formControlName="shortTitle">Short title</tui-input>
   <button tuiButton>Create</button>

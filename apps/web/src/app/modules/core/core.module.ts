@@ -38,10 +38,14 @@ const routes: Routes = [
     loadChildren: () =>
       import('../grades/grades.module').then((m) => m.GradesModule),
   },
+  {
+    path: '**',
+    redirectTo: 'applications',
+  },
 ];
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule.forChild(routes), TuiGroupModule],
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
 export class CoreModule {}

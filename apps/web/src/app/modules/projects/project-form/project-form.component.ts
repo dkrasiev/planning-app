@@ -25,25 +25,14 @@ export class ProjectFormComponent {
     const project = this.projectForm.value;
 
     if (project.shortTitle && project.fullTitle) {
-      this.projectsService.create$(project).subscribe({
-        next: () => {
-          this.create.emit(project);
-          this.alertService.open(`${project.shortTitle} created!`).subscribe();
-        },
-        error: () => {
-          this.alertService
-            .open('Project with this title already exists!', {
-              status: TuiNotification.Error,
-            })
-            .subscribe();
-        },
+      this.projectsService.create$(project).subscribe((skill) => {
+        this.create.emit(skill);
+        this.alertService.open('Success!').subscribe();
       });
+
+      this.projectForm.reset();
     } else {
-      this.alertService
-        .open('Please, fill project form!', {
-          status: TuiNotification.Warning,
-        })
-        .subscribe();
+      throw new Error('Please, fill project form!');
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TuiAlertService } from '@taiga-ui/core';
 
 import { Grade, GradesService } from '../grades.service';
 
@@ -16,15 +17,21 @@ export class GradeFormComponent {
     name: new FormControl<string>('', Validators.required),
   });
 
-  constructor(private gradesService: GradesService) {}
+  constructor(
+    private gradesService: GradesService,
+    private alertService: TuiAlertService
+  ) {}
 
   public onSubmit() {
     const name = this.gradeForm.get('name')?.value;
 
     if (this.gradeForm.valid && name) {
-      this.gradesService
-        .create$(name)
-        .subscribe((skill) => this.create.emit(skill));
+      this.gradesService.create$(name).subscribe((skill) => {
+        this.create.emit(skill);
+        this.alertService.open('Success!').subscribe();
+      });
+
+      this.gradeForm.reset();
     } else {
       throw new Error('Name required!');
     }

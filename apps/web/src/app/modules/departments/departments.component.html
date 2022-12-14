@@ -1,1 +1,33 @@
-<p>departments works!</p>
+<button tuiButton (click)="update()">Update</button>
+
+<div>
+  <app-department-form (create)="update()"></app-department-form>
+</div>
+
+<ng-container *ngIf="departments$ | async as departments">
+  <ul *ngIf="departments.length > 0; else notFound" class="tui-list">
+    <li
+      *ngFor="let department of departments"
+      class="tui-list__item department"
+    >
+      <div class="department__header">
+        <h3 class="department__title">
+          {{ department.name }}
+        </h3>
+
+        <button
+          tuiButton
+          size="s"
+          appearance="secondary-destructive"
+          (click)="onDelete(department.id)"
+        >
+          delete
+        </button>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #notFound>
+    <h1>No departments created</h1>
+  </ng-template>
+</ng-container>

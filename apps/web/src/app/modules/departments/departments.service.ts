@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
 import { environment } from 'src/environments/environment';
 
-export interface Grade {
+export interface Department {
   id: number;
   name: string;
 }
@@ -12,17 +11,19 @@ export interface Grade {
 @Injectable({
   providedIn: 'root',
 })
-export class GradesService {
-  public grades$: BehaviorSubject<Grade[]> = new BehaviorSubject<Grade[]>([]);
+export class DepartmentsService {
+  public departments$: BehaviorSubject<Department[]> = new BehaviorSubject<
+    Department[]
+  >([]);
 
-  private apiUrl: string = environment.apiUrl + '/grades';
+  private apiUrl: string = environment.apiUrl + '/departments/';
 
   constructor(private http: HttpClient) {}
 
   public update() {
     this.http
-      .get<Grade[]>(this.apiUrl)
-      .subscribe((grades) => this.grades$.next(grades));
+      .get<Department[]>(this.apiUrl)
+      .subscribe((departments) => this.departments$.next(departments));
   }
 
   public delete$(id: number) {
@@ -30,6 +31,6 @@ export class GradesService {
   }
 
   public create$(name: string) {
-    return this.http.post<Grade>(this.apiUrl, { name });
+    return this.http.post<Department>(this.apiUrl, { name });
   }
 }

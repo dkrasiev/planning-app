@@ -13,7 +13,7 @@ export class GradesComponent implements OnInit {
   constructor(private gradesService: GradesService) {}
 
   public ngOnInit() {
-    this.update;
+    this.update();
   }
 
   public update() {

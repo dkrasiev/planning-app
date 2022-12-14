@@ -21,10 +21,8 @@ import { TuiInputModule } from '@taiga-ui/kit';
     ReactiveFormsModule,
 
     TuiButtonModule,
-    TuiGroupModule,
     TuiInputModule,
     TuiAlertModule,
-    TuiSvgModule,
   ],
 })
 export class ProjectsModule {}

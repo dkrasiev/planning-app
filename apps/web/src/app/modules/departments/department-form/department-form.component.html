@@ -1,0 +1,8 @@
+<form
+  [formGroup]="departmentForm"
+  orientation="horizontal"
+  (submit)="onSubmit()"
+>
+  <tui-input formControlName="name">Department name</tui-input>
+  <button tuiButton>Create</button>
+</form>
