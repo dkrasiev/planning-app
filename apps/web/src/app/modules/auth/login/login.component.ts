@@ -31,11 +31,4 @@ export class LoginComponent {
     if (username && password)
       this.authService.login$({ username, password }).subscribe();
   }
-
-  public register() {
-    const { username, password } = this.loginForm.value;
-
-    if (username && password)
-      this.authService.register$({ username, password }).subscribe();
-  }
 }

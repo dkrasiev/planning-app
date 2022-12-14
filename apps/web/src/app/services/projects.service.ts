@@ -40,14 +40,8 @@ export class ProjectsService {
       .subscribe();
   }
 
-  public create$({
-    shortTitle,
-    fullTitle,
-  }: {
-    shortTitle: string;
-    fullTitle: string;
-  }) {
-    return this.http.post<Project>(this.apiUrl, { shortTitle, fullTitle });
+  public create$(project: { shortTitle: string; fullTitle: string }) {
+    return this.http.post<Project>(this.apiUrl, project);
   }
 
   public delete$(id: string | number) {

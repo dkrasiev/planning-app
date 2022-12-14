@@ -1,16 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
 
-export interface LoginRequestBody {
+export interface LoginPayload {
   username: string;
   password: string;
 }
 
 export interface RegisterPayload {
   username: string;
+  firstName: string;
+  lastName: string;
   password: string;
   email?: string;
 }
@@ -38,7 +40,7 @@ export class AuthService {
     }
   }
 
-  public login$(payload: LoginRequestBody) {
+  public login$(payload: LoginPayload) {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/login`, payload, {
         withCredentials: true,

@@ -52,6 +52,7 @@ export class AuthController {
 
       return { result: !!user };
     } catch (e) {
+      console.error(e);
       if (e instanceof HttpException) throw e;
 
       throw new InternalServerErrorException();

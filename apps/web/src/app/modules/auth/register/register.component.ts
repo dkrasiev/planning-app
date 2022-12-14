@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
+import { first, last } from 'rxjs';
 
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -13,6 +14,8 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent {
   public registerForm = new FormGroup({
     username: new FormControl<string>('', [Validators.required]),
+    firstName: new FormControl<string>('', [Validators.required]),
+    lastName: new FormControl<string>('', [Validators.required]),
     password: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(8),
@@ -28,11 +31,24 @@ export class RegisterComponent {
   ) {}
 
   public register() {
-    const { username, password, email } = this.registerForm.value;
+    const { username, password, firstName, lastName, email } =
+      this.registerForm.value;
 
-    if (username && password) {
+    if (
+      this.registerForm.valid &&
+      username &&
+      password &&
+      firstName &&
+      lastName
+    ) {
       this.authService
-        .register$({ username, password, email: email || undefined })
+        .register$({
+          username,
+          password,
+          email: email || undefined,
+          firstName,
+          lastName,
+        })
         .subscribe({
           next: () => this.router.navigate(['../', 'login']),
           error: (e) => {
