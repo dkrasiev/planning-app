@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './modules/auth/services/auth.service';
 
 interface Route {
   title: string;

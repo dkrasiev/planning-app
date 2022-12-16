@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, switchMap } from 'rxjs';
 
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { Application } from '../modules/applications/application';
 
