@@ -40,8 +40,8 @@ export class ApplicationsService {
       weekId,
     }: CreatePayload,
   ) {
-    const creator = await this.users.findOne({ where: { uid } });
-    const employee = await this.users.findOne({ where: { uid: employeeId } });
+    const creator = await this.users.findOne({ where: { id: uid } });
+    const employee = await this.users.findOne({ where: { id: employeeId } });
 
     const department = await this.departments.findOne({
       where: { id: departmentId },
@@ -81,7 +81,7 @@ export class ApplicationsService {
 
   public async checkIsProjectManager(uid: string): Promise<boolean> {
     const user = await this.users.findOne({
-      where: { uid },
+      where: { id: uid },
       relations: { role: true },
     });
 

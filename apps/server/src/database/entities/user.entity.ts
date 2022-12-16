@@ -7,16 +7,16 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
+
 import { Department } from './department.entity';
 import { Grade } from './grade.entity';
-
 import { Role } from './role.entity';
 import { Skill } from './skill.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  uid: string;
+  id: string;
 
   @Column({ unique: true })
   username: string;
@@ -36,19 +36,19 @@ export class User {
   @Column({ nullable: true })
   token: string;
 
-  @ManyToMany(() => Skill)
+  @ManyToMany(() => Skill, { nullable: false })
   @JoinTable()
   skills: Skill[];
 
-  @ManyToOne(() => Department)
+  @ManyToOne(() => Department, { nullable: false })
   @JoinColumn()
   department: Department;
 
-  @ManyToOne(() => Grade)
+  @ManyToOne(() => Grade, { nullable: false })
   @JoinColumn()
   grade: Grade;
 
-  @ManyToOne(() => Role)
+  @ManyToOne(() => Role, { nullable: false })
   @JoinColumn()
   role: Role;
 

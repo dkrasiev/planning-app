@@ -15,7 +15,7 @@ export class Skill {
   @Column({ unique: true })
   name: string;
 
-  @ManyToOne(() => Department)
+  @ManyToOne(() => Department, { nullable: false })
   @JoinColumn()
   department: Department;
 }

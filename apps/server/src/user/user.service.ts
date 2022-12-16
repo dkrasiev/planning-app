@@ -10,7 +10,7 @@ export class UserService {
   public async getAll() {
     const users = await this.users.find();
 
-    return await Promise.all(users.map((user) => this.getSafeUser(user.uid)));
+    return await Promise.all(users.map((user) => this.getSafeUser(user.id)));
   }
 
   public async getById(uid: string) {
@@ -20,7 +20,7 @@ export class UserService {
   public async getByUsername(username: string) {
     const user = await this.users.findOne({ where: { username } });
 
-    return await this.getSafeUser(user.uid);
+    return await this.getSafeUser(user.id);
   }
 
   public async deleteById(uid: string): Promise<{ result: boolean }> {
@@ -31,7 +31,7 @@ export class UserService {
 
   private async getSafeUser(uid: string) {
     const userWithRelations = await this.users.findOne({
-      where: { uid },
+      where: { id: uid },
       relations: {
         department: true,
         grade: true,

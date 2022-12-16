@@ -33,7 +33,7 @@ export class AuthService {
   public async login(userDto: AuthDto) {
     const user = await this.verifyAndGetUser(userDto);
 
-    const tokens = await this.tokenService.generateAndSaveTokens(user.uid);
+    const tokens = await this.tokenService.generateAndSaveTokens(user.id);
 
     return { ...tokens, user: user.getSafeUser() };
   }
@@ -70,7 +70,7 @@ export class AuthService {
 
     if (typeof uid !== 'string') throw new ForbiddenException();
 
-    const user = await this.users.findOne({ where: { uid } });
+    const user = await this.users.findOne({ where: { id: uid } });
 
     if (!user) throw new NotFoundException('User not found');
 
