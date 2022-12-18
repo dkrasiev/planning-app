@@ -1,13 +1,68 @@
-<button tuiButton (click)="update()">Update</button>
+<div tuiGroup>
+  <button tuiButton (click)="update()">Update</button>
+
+  <button *ngIf="isCreating === false" tuiButton (click)="showForm()">
+    Create new
+  </button>
+</div>
+
+<ng-container *ngIf="isCreating">
+  <app-application
+    (create)="onCreate($event)"
+    (cancel)="hideForm()"
+  ></app-application>
+</ng-container>
 
 <ng-container *ngIf="applications$ | async as applications">
-  <ul *ngIf="applications.length > 0; else notFound" class="tui-list">
-    <li *ngFor="let application of applications">
-      {{ application.id }}
-    </li>
-  </ul>
+  <div>
+    <tui-island
+      *ngFor="let application of applications"
+      class="application"
+      textAlign="center"
+    >
+      <div class="tui-island__title">
+        {{ application.project.fullTitle }}
+        ({{ application.project.shortTitle }})
 
-  <ng-template #notFound>
-    <h1>No applications created</h1>
-  </ng-template>
+        {{ application.confirmed ? "Confirmed!" : "Not confirmed" }}
+      </div>
+
+      <div class="tui-island__content">
+        <p class="tui-island__paragraph">Week: {{ application.weekId }}</p>
+        <p class="tui-island__paragraph">Hours: {{ application.hours }}</p>
+        <p class="tui-island__paragraph">
+          Creator: {{ application.creator.username }}
+        </p>
+        <p class="tui-island__paragraph">
+          Employee: {{ application.employee.username }}
+        </p>
+
+        <p *ngIf="application.description" class="tui-island__paragraph">
+          {{ application.description }}
+        </p>
+      </div>
+
+      <div tuiGroup style="margin-top: 1rem">
+        <button
+          class="tui-island__carousel-button"
+          tuiButton
+          (click)="onConfirm(application.id)"
+        >
+          {{ application.confirmed ? "Undo confirm" : "Confirm" }}
+        </button>
+        <button
+          class="tui-tui-island__carousel-button"
+          tuiButton
+          appearance="secondary-destructive"
+          (click)="onDelete(application.id)"
+        >
+          Delete
+        </button>
+      </div>
+    </tui-island>
+  </div>
 </ng-container>
+
+<ng-template #notFound>
+  <h1>No applications created</h1>
+</ng-template>

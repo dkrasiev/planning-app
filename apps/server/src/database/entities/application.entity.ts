@@ -6,7 +6,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Department } from './department.entity';
 import { Project } from './project.entity';
 import { User } from './user.entity';
 
@@ -38,8 +37,4 @@ export class Application {
   @ManyToOne(() => User)
   @JoinColumn()
   employee: User;
-
-  @ManyToOne(() => Department)
-  @JoinColumn()
-  department: Department;
 }

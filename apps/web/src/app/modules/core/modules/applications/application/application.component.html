@@ -1,0 +1,33 @@
+<form [formGroup]="applicationForm" (submit)="onSubmit()">
+  <tui-input-number formControlName="week">Week</tui-input-number>
+  <tui-input formControlName="hours">Hours</tui-input>
+
+  <tui-select formControlName="employee" [stringify]="stringifyUser">
+    Employee
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="users$ | async"
+      [itemContent]="template"
+    ></tui-data-list-wrapper>
+  </tui-select>
+
+  <tui-select formControlName="project" [stringify]="stringifyProject">
+    Projects
+    <tui-data-list-wrapper
+      *tuiDataList
+      [items]="projects$ | async"
+      [itemContent]="template"
+    ></tui-data-list-wrapper>
+  </tui-select>
+
+  <tui-text-area formControlName="description">Description</tui-text-area>
+
+  <div tuiGroup>
+    <button tuiButton type="submit">Create</button>
+    <button tuiButton type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>
+
+<ng-template #template let-item>
+  {{ item?.shortTitle || stringifyUser(item) }}
+</ng-template>

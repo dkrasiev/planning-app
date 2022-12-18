@@ -1,9 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApplicationsComponent } from './applications.component';
 import { RouterModule, Routes } from '@angular/router';
+import {
+  TuiButtonModule,
+  TuiDataListModule,
+  TuiGroupModule,
+} from '@taiga-ui/core';
+import {
+  TuiDataListWrapperModule,
+  TuiInputModule,
+  TuiInputNumberModule,
+  TuiIslandModule,
+  TuiSelectModule,
+  TuiTextAreaModule,
+  TuiToggleModule,
+} from '@taiga-ui/kit';
+
+import { ApplicationsComponent } from './applications.component';
 import { ApplicationsService } from '../../services/applications.service';
-import { TuiButtonModule } from '@taiga-ui/core';
+import { ApplicationComponent } from './application/application.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -13,8 +29,22 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ApplicationsComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), TuiButtonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+
+    TuiButtonModule,
+    TuiInputModule,
+    TuiInputNumberModule,
+    TuiDataListModule,
+    TuiDataListWrapperModule,
+    TuiGroupModule,
+    TuiSelectModule,
+    TuiTextAreaModule,
+    TuiIslandModule,
+  ],
+  declarations: [ApplicationsComponent, ApplicationComponent],
   providers: [ApplicationsService],
 })
 export class ApplicationsModule {}

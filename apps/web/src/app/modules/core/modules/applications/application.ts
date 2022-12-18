@@ -8,4 +8,6 @@ export interface Application {
   employee: User;
   creator: User;
   project: Project;
+  description: string;
+  confirmed: boolean;
 }

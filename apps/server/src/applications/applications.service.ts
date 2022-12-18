@@ -7,7 +7,7 @@ import { Project } from 'src/database/entities/project.entity';
 import { Application } from 'src/database/entities/application.entity';
 import { Role } from 'src/database/entities/role.entity';
 import { User } from 'src/database/entities/user.entity';
-import { CreatePayload } from './applications.controller';
+import { ApplicationDto } from './applications.controller';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
@@ -30,37 +30,42 @@ export class ApplicationsService {
   }
 
   public async getAll() {
-    return this.applications.find();
+    const applications = await this.applications.find({
+      relations: { employee: true, creator: true, project: true },
+    });
+
+    for (const application of applications) {
+      application.employee = await this.userService.getSafeUser(
+        application.employee.id,
+      );
+
+      application.creator = await this.userService.getSafeUser(
+        application.creator.id,
+      );
+    }
+
+    return applications;
   }
 
   public async create(
     id: string,
-    {
-      employee: employeeUsername,
-      departmentId,
-      projectId,
-      hours,
-      weekId,
-    }: CreatePayload,
+    { week, hours, employeeUsername, projectId, description }: ApplicationDto,
   ) {
     const creator = await this.users.findOne({ where: { id } });
     const employee = await this.users.findOne({
       where: { username: employeeUsername },
     });
 
-    const department = await this.departments.findOne({
-      where: { id: departmentId },
-    });
-
     const project = await this.projects.findOne({ where: { id: projectId } });
 
     const application = this.applications.create({
+      weekId: week,
+      hours,
       creator,
       employee,
-      department,
       project,
-      weekId,
-      hours,
+      description,
+      confirmed: false,
     });
 
     await this.applications.save(application);
@@ -68,16 +73,26 @@ export class ApplicationsService {
     return this.getSafeApplication(application);
   }
 
-  public async confirm(applicationId: number) {
-    const application = await this.applications.findOne({
-      where: { id: applicationId },
-    });
+  public async toggle(id: number) {
+    const application = await this.getApplication(id);
 
-    if (!application) throw new NotFoundException();
-
-    application.confirmed = true;
+    application.confirmed = !application.confirmed;
 
     return this.applications.save(application);
+  }
+
+  public async updateStatus(id: number, newStatus = true) {
+    const application = await this.getApplication(id);
+
+    application.confirmed = newStatus;
+
+    return this.applications.save(application);
+  }
+
+  public async delete(id: number) {
+    const result = await this.applications.delete(id);
+
+    return { result: result.affected > 0 };
   }
 
   public async checkIsProjectManager(id: string): Promise<boolean> {
@@ -91,6 +106,14 @@ export class ApplicationsService {
     }
 
     return false;
+  }
+
+  private async getApplication(id: number) {
+    const candidate = await this.applications.findOne({ where: { id } });
+
+    if (!candidate) throw new NotFoundException('Application not found');
+
+    return candidate;
   }
 
   private async getSafeApplication(

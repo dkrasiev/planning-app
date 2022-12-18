@@ -13,6 +13,7 @@ import { GradesService } from '../../../services/grades.service';
 import { SkillsService } from '../../../services/skills.service';
 import { ApplicationsService } from '../../../services/applications.service';
 import { WeekService } from '../../../services/week.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-user',

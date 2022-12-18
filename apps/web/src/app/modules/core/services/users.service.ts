@@ -25,7 +25,9 @@ export class UsersService {
 
   private apiUrl: string = environment.apiUrl + '/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.update();
+  }
 
   public update() {
     this.http
