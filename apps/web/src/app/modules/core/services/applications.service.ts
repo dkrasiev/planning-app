@@ -1,19 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { Application } from '../modules/applications/application';
 
 export interface NewApplication {
   hours: number;
   weekId: number;
-  employeeId: string;
+  employee: string;
   projectId: number;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ApplicationsService {
   public applications$: BehaviorSubject<Application[]> = new BehaviorSubject<
     Application[]
@@ -21,7 +20,7 @@ export class ApplicationsService {
 
   private apiUrl: string = environment.apiUrl + '/applications';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient) {}
 
   public update() {
     this.http
@@ -30,12 +29,6 @@ export class ApplicationsService {
   }
 
   public create$(newApplication: NewApplication) {
-    return this.authService.user$.pipe(
-      switchMap((user) => {
-        const creatorId = user?.uid;
-
-        return this.http.post(this.apiUrl, { ...newApplication, creatorId });
-      })
-    );
+    return this.http.post(this.apiUrl, newApplication);
   }
 }

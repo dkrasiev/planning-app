@@ -1,16 +1,19 @@
 import { Department } from '../../departments/department';
 import { Grade } from '../../grades/grade';
 import { Skill } from '../../skills/skill';
+import { Right } from './right';
 
 export interface User {
-  uid: string;
   username: string;
 
+  firstName: string;
+  lastName: string;
+
   skills: Skill[];
-  department: Department;
-  grade: Grade;
   role: Role;
 
+  department?: Department;
+  grade?: Grade;
   email?: string;
 }
 
@@ -18,9 +21,4 @@ export interface Role {
   id: number;
   name: string;
   rights: Right[];
-}
-
-export interface Right {
-  id: number;
-  name: string;
 }

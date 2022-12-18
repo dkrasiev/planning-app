@@ -13,7 +13,9 @@ export class GradesService {
 
   private apiUrl: string = environment.apiUrl + '/grades';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.update();
+  }
 
   public update() {
     this.http

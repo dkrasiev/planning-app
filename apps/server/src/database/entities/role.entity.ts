@@ -5,6 +5,7 @@ import {
   JoinTable,
   Column,
 } from 'typeorm';
+
 import { Right } from './right.entity';
 
 @Entity()

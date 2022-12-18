@@ -8,7 +8,7 @@ import { ApplicationsService } from './applications.service';
 export interface CreatePayload {
   hours: number;
   weekId: number;
-  employeeUid: string;
+  employee: string;
   departmentId: number;
   projectId: number;
 }
@@ -23,25 +23,19 @@ export class ApplicationsController {
 
   @Get()
   async getAll() {
-    try {
-      return await this.applicationsService.getAll();
-    } catch (e) {}
+    return await this.applicationsService.getAll();
   }
 
   @Post()
   async create(@Body() body: CreatePayload, @Req() request: Request) {
-    try {
-      const token = request.headers.authorization?.split(' ')[1];
-      const uid = this.tokenService.validateAccessToken(token);
+    const token = request.headers.authorization?.split(' ')[1];
+    const id = this.tokenService.validateAccessToken(token);
 
-      return await this.applicationsService.create(uid, body);
-    } catch (e) {}
+    return await this.applicationsService.create(id, body);
   }
 
   @Post(':uid/confirm')
   async confirm(@Body() { applicationId }: { applicationId: number }) {
-    try {
-      this.applicationsService.confirm(applicationId);
-    } catch (e) {}
+    this.applicationsService.confirm(applicationId);
   }
 }

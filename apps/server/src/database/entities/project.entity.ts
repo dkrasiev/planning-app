@@ -7,6 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+
 import { Skill } from './skill.entity';
 import { User } from './user.entity';
 

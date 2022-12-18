@@ -11,7 +11,7 @@ import { Skill } from '../modules/skills/skill';
 export class SkillsService {
   public skills$: BehaviorSubject<Skill[]> = new BehaviorSubject<Skill[]>([]);
 
-  private apiUrl: string = environment.apiUrl + '/skills/';
+  private apiUrl: string = environment.apiUrl + '/skills';
 
   constructor(private http: HttpClient) {}
 

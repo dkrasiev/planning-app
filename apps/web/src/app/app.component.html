@@ -5,6 +5,7 @@
       tuiButton
       [routerLink]="route.path"
       (click)="route?.handler && route?.handler()"
+      [appearance]="getAppearance(route.path)"
     >
       {{ route.title }}
     </button>

@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
+
+import { User } from 'src/database/entities/user.entity';
+import { UpdateDto } from './user.controller';
 
 @Injectable()
 export class UserService {
@@ -10,36 +12,80 @@ export class UserService {
   public async getAll() {
     const users = await this.users.find();
 
-    return await Promise.all(users.map((user) => this.getSafeUser(user.id)));
-  }
-
-  public async getById(uid: string) {
-    return await this.getSafeUser(uid);
+    return Promise.all(users.map((user) => this.getSafeUser(user.id)));
   }
 
   public async getByUsername(username: string) {
     const user = await this.users.findOne({ where: { username } });
 
-    return await this.getSafeUser(user.id);
+    if (!user) throw new NotFoundException();
+
+    return this.getSafeUser(user.id);
   }
 
-  public async deleteById(uid: string): Promise<{ result: boolean }> {
-    const result = await this.users.delete(uid);
+  public async deleteByUsername(
+    username: string,
+  ): Promise<{ result: boolean }> {
+    const user = await this.getByUsername(username);
+
+    const result = await this.users.delete(user);
 
     return { result: result.affected > 0 };
   }
 
-  private async getSafeUser(uid: string) {
-    const userWithRelations = await this.users.findOne({
-      where: { id: uid },
+  public async update(
+    username: string,
+    { firstName, lastName, email, department, grade, role, skills }: UpdateDto,
+  ): Promise<User> {
+    const user = await this._getUserByUsername(username);
+
+    const updatedUser = {
+      ...user,
+      firstName,
+      lastName,
+      email,
+      department,
+      grade,
+      role,
+      skills,
+    };
+
+    await this.users.save(updatedUser);
+
+    return this.getSafeUser(user.id);
+  }
+
+  public async getUserWithAllRelations(id: string) {
+    return await this.users.findOne({
+      where: { id },
       relations: {
         department: true,
         grade: true,
         skills: true,
-        role: true,
+        role: {
+          rights: true,
+        },
       },
     });
+  }
 
-    return userWithRelations;
+  public async getSafeUser(id: string): Promise<User> {
+    const user = await this.getUserWithAllRelations(id);
+
+    if (!user) throw new NotFoundException();
+
+    delete user.id;
+    delete user.password;
+    delete user.token;
+
+    return user;
+  }
+
+  private async _getUserByUsername(username: string) {
+    const user = await this.users.findOne({ where: { username } });
+
+    if (!user) throw new NotFoundException();
+
+    return user;
   }
 }

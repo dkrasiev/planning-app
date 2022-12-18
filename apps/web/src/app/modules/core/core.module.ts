@@ -40,7 +40,8 @@ const routes: Routes = [
       import('./modules/grades/grades.module').then((m) => m.GradesModule),
   },
   {
-    path: '**',
+    path: '',
+    pathMatch: 'full',
     redirectTo: 'applications',
   },
 ];

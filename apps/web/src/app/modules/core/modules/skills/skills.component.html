@@ -1,7 +1,7 @@
 <button tuiButton (click)="update()">Update</button>
 
 <div>
-  <app-skill-form (create)="update()"></app-skill-form>
+  <app-skill-form (create)="onCreate()"></app-skill-form>
 </div>
 
 <ng-container *ngIf="skills$ | async as skills">

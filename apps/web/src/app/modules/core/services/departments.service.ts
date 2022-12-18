@@ -13,7 +13,7 @@ export class DepartmentsService {
     Department[]
   >([]);
 
-  private apiUrl: string = environment.apiUrl + '/departments/';
+  private apiUrl: string = environment.apiUrl + '/departments';
 
   constructor(private http: HttpClient) {}
 

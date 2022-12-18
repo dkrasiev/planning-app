@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+
 import { Department } from './department.entity';
 
 @Entity()
@@ -15,7 +16,7 @@ export class Skill {
   @Column({ unique: true })
   name: string;
 
-  @ManyToOne(() => Department, { nullable: false })
+  @ManyToOne(() => Department)
   @JoinColumn()
   department: Department;
 }

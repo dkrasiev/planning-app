@@ -1,16 +1,81 @@
-<ng-container *ngIf="isLoading; else loaded">
+<ng-container *ngIf="isLoading; else userInfo">
   <h1>Loading...</h1>
 </ng-container>
 
-<ng-template #loaded>
-  <div *ngIf="user; else notFound" class="user">
-    <h1 class="user__title">{{ user.username }}</h1>
-    <p>email: {{ user.email || "none" }}</p>
-    <p>role: {{ user.role.name || "none" }}</p>
-    <p>department: {{ user.department.name || "none" }}</p>
-    <p>grade: {{ user.grade.name || "none" }}</p>
-    <p>skills: {{ userSkills }}</p>
-  </div>
+<ng-template #userInfo>
+  <ng-container *ngIf="user; else notFound">
+    <ng-container *ngIf="isEdit === false; else edit">
+      <div class="user">
+        <h1 class="user__title">{{ user.username }}</h1>
+
+        <p>email: {{ user.email || "none" }}</p>
+        <p>role: {{ user.role.name || "none" }}</p>
+        <p>department: {{ user.department?.name || "none" }}</p>
+        <p>grade: {{ user.grade?.name || "none" }}</p>
+        <p>skills: {{ userSkills }}</p>
+        <p>projects: {{ userProjects }}</p>
+      </div>
+
+      <button tuiButton (click)="startEdit()">Edit</button>
+    </ng-container>
+
+    <ng-template #edit>
+      <form [formGroup]="userForm">
+        <tui-input formControlName="firstName">First name</tui-input>
+        <tui-input formControlName="lastName">Last name</tui-input>
+        <tui-input formControlName="email">Email</tui-input>
+        <tui-combo-box formControlName="department" [stringify]="stringify">
+          Department
+          <tui-data-list-wrapper
+            *tuiDataList
+            [items]="departments$ | async"
+            [itemContent]="content"
+          ></tui-data-list-wrapper>
+        </tui-combo-box>
+        <tui-multi-select formControlName="skills" [stringify]="stringify">
+          Skills
+          <tui-data-list-wrapper
+            *tuiDataList
+            [items]="skills$ | async"
+            [itemContent]="content"
+          ></tui-data-list-wrapper>
+        </tui-multi-select>
+        <tui-combo-box formControlName="grade" [stringify]="stringify">
+          Grade
+          <tui-data-list-wrapper
+            *tuiDataList
+            [items]="grades$ | async"
+            [itemContent]="content"
+          ></tui-data-list-wrapper>
+        </tui-combo-box>
+
+        <div class="buttons" tuiGroup>
+          <button
+            tuiButton
+            type="submit"
+            (click)="save()"
+            [showLoader]="isSaving"
+          >
+            Save
+          </button>
+          <button
+            tuiButton
+            type="button"
+            appearance="secondary"
+            (click)="cancelEdit()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #content let-data>
+    <div class="template">
+      <div>{{ data.name }}</div>
+    </div>
+  </ng-template>
 
   <ng-template #notFound>
     <h1>User not found</h1>

@@ -25,6 +25,7 @@
     "@taiga-ui/kit": "^3.12.1",
     "@taiga-ui/styles": "^3.12.1",
     "@tinkoff/ng-dompurify": "3.0.0",
+    "dayjs": "^1.11.7",
     "dompurify": "2.2.9",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

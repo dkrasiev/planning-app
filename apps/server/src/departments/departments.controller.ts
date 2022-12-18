@@ -8,11 +8,11 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { DepartmentsService } from './departments.service';
 
 @Controller('departments')
-@UseGuards(AuthGuard)
 export class DepartmentsController {
   constructor(private departmentsService: DepartmentsService) {}
 
@@ -32,11 +32,13 @@ export class DepartmentsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async deleteById(@Param('id', ParseIntPipe) id: number) {
     return await this.departmentsService.deleteOne(id);
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body() { name }: { name: string }) {
     return await this.departmentsService.create(name);
   }

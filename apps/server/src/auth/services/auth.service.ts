@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ForbiddenException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -11,8 +10,10 @@ import * as bcrypt from 'bcrypt';
 
 import { User } from '../../database/entities/user.entity';
 import { TokenService } from './token.service';
-import { AuthDto } from '../dtos/user.dto';
+import { RegisterDto } from '../dtos/register.dto';
 import { Role } from 'src/database/entities/role.entity';
+import { UserService } from 'src/user/user.service';
+import { LoginDto } from '../dtos/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,21 +22,31 @@ export class AuthService {
   constructor(
     @InjectRepository(User) private users: Repository<User>,
     @InjectRepository(Role) private roles: Repository<Role>,
-    @Inject('DEFAULT_ROLE_NAME')
-    private DEFAULT_ROLE_NAME: string,
+
     private tokenService: TokenService,
+    private userService: UserService,
   ) {
-    this.roles
-      .findOne({ where: { name: DEFAULT_ROLE_NAME } })
-      .then((defaultRole) => (this.defaultRole = defaultRole));
+    const defaultRoleName = process.env.DEFAULT_ROLE_NAME;
+
+    if (defaultRoleName) {
+      this.roles
+        .findOne({ where: { name: defaultRoleName } })
+        .then((defaultRole) => (this.defaultRole = defaultRole));
+    } else {
+      this.roles
+        .findOne({ where: { id: 1 } })
+        .then((role) => (this.defaultRole = role));
+    }
   }
 
-  public async login(userDto: AuthDto) {
-    const user = await this.verifyAndGetUser(userDto);
+  public async login(loginDto: LoginDto) {
+    const user = await this.verifyAndGetUser(loginDto);
 
     const tokens = await this.tokenService.generateAndSaveTokens(user.id);
 
-    return { ...tokens, user: user.getSafeUser() };
+    const safeUser = this.userService.getSafeUser(user.id);
+
+    return { ...tokens, user: safeUser };
   }
 
   public async register({
@@ -43,7 +54,8 @@ export class AuthService {
     password,
     firstName,
     lastName,
-  }: AuthDto): Promise<User> {
+    email,
+  }: RegisterDto): Promise<User> {
     const candidate = await this.users.findOne({
       where: { username },
     });
@@ -58,31 +70,33 @@ export class AuthService {
       password: hashPassword,
       firstName,
       lastName,
+      email,
+      role: this.defaultRole,
     });
-
-    if (this.defaultRole) user.role = this.defaultRole;
 
     return await this.users.save(user);
   }
 
   public async refresh(refreshToken: string) {
-    const uid = this.tokenService.validateRefreshToken(refreshToken);
+    const id = this.tokenService.validateRefreshToken(refreshToken);
 
-    if (typeof uid !== 'string') throw new ForbiddenException();
+    if (typeof id !== 'string') throw new ForbiddenException();
 
-    const user = await this.users.findOne({ where: { id: uid } });
+    const user = await this.users.findOne({ where: { id } });
 
     if (!user) throw new NotFoundException('User not found');
 
-    const tokens = await this.tokenService.generateAndSaveTokens(uid);
+    const tokens = await this.tokenService.generateAndSaveTokens(id);
 
-    return { ...tokens, user: user.getSafeUser() };
+    const safeUser = this.userService.getSafeUser(user.id);
+
+    return { ...tokens, user: safeUser };
   }
 
   private async verifyAndGetUser({
     username,
     password,
-  }: AuthDto): Promise<User> {
+  }: LoginDto): Promise<User> {
     const user = await this.users.findOne({ where: { username } });
     if (!user) throw new NotFoundException('User not found');
 

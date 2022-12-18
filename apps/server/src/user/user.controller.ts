@@ -1,7 +1,29 @@
-import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { Department } from 'src/database/entities/department.entity';
+import { Grade } from 'src/database/entities/grade.entity';
+import { Role } from 'src/database/entities/role.entity';
+import { Skill } from 'src/database/entities/skill.entity';
+
+export interface UpdateDto {
+  firstName: string;
+  lastName: string;
+  department: Department;
+  email: string;
+  grade: Grade;
+  role: Role;
+  skills: Skill[];
+}
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -20,8 +42,17 @@ export class UserController {
     return user;
   }
 
-  @Delete(':uid')
-  async deleteById(@Param('uid') uid: string) {
-    return await this.userService.deleteById(uid);
+  @Post(':username')
+  async update(
+    @Param('username') username: string,
+    @Body()
+    payload: UpdateDto,
+  ) {
+    return await this.userService.update(username, payload);
+  }
+
+  @Delete(':username')
+  async deleteById(@Param('username') username: string) {
+    return await this.userService.deleteByUsername(username);
   }
 }

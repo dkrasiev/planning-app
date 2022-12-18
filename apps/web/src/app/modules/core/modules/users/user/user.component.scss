@@ -1,5 +1,11 @@
 .user {
+  margin-bottom: 1rem;
+
   &__title {
     margin-bottom: 1rem;
   }
+}
+
+form > * {
+  margin-bottom: 1rem;
 }

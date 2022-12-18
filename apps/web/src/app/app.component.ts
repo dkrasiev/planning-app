@@ -51,11 +51,21 @@ export class AppComponent {
     },
   ];
 
+  public get route(): string {
+    const url = this.router.url;
+
+    return url;
+  }
+
   constructor(private authService: AuthService, private router: Router) {}
 
   public logout() {
     this.authService.logout();
 
     this.router.navigate(['auth']);
+  }
+
+  public getAppearance(route: string = ''): string {
+    return this.route === route ? 'primary' : 'outline';
   }
 }

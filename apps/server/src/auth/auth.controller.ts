@@ -3,22 +3,20 @@ import {
   Controller,
   ForbiddenException,
   Get,
-  HttpException,
-  InternalServerErrorException,
   Post,
   Req,
   Res,
 } from '@nestjs/common';
 import { CookieOptions, Request, Response } from 'express';
+import { LoginDto } from './dtos/login.dto';
 
-import { AuthDto } from './dtos/user.dto';
+import { RegisterDto } from './dtos/register.dto';
 import { AuthService } from './services/auth.service';
 
 @Controller('auth')
 export class AuthController {
   private cookieOptions: CookieOptions = {
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    domain: process.env.URL,
     httpOnly: true,
   };
   private refreshTokenKey = 'refreshToken';
@@ -27,36 +25,23 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() userDto: AuthDto,
+    @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    try {
-      const { token, refreshToken, user } = await this.authService.login(
-        userDto,
-      );
+    const { token, refreshToken, user } = await this.authService.login(
+      loginDto,
+    );
 
-      response.cookie(this.refreshTokenKey, refreshToken, this.cookieOptions);
+    response.cookie(this.refreshTokenKey, refreshToken, this.cookieOptions);
 
-      return { token, user };
-    } catch (e) {
-      if (e instanceof HttpException) throw e;
-
-      throw new InternalServerErrorException();
-    }
+    return { token, user };
   }
 
   @Post('register')
-  async register(@Body() userDto: AuthDto) {
-    try {
-      const user = await this.authService.register(userDto);
+  async register(@Body() userDto: RegisterDto) {
+    const user = await this.authService.register(userDto);
 
-      return { result: !!user };
-    } catch (e) {
-      console.error(e);
-      if (e instanceof HttpException) throw e;
-
-      throw new InternalServerErrorException();
-    }
+    return { result: !!user };
   }
 
   @Get('refresh')
@@ -75,6 +60,7 @@ export class AuthController {
 
       return { token, user };
     } catch (e) {
+      console.error(e);
       throw new ForbiddenException();
     }
   }

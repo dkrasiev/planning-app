@@ -13,7 +13,6 @@ import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { GradesService } from './grades.service';
 
 @Controller('grades')
-@UseGuards(AuthGuard)
 export class GradesController {
   constructor(private gradesService: GradesService) {}
 
@@ -33,11 +32,13 @@ export class GradesController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async deleteById(@Param('id', ParseIntPipe) id: number) {
     return await this.gradesService.deleteOne(id);
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body() { name }: { name: string }) {
     return await this.gradesService.create(name);
   }

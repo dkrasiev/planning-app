@@ -36,28 +36,23 @@ export class User {
   @Column({ nullable: true })
   token: string;
 
-  @ManyToMany(() => Skill, { nullable: false })
+  @ManyToMany(() => Skill, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinTable()
   skills: Skill[];
 
-  @ManyToOne(() => Department, { nullable: false })
+  @ManyToOne(() => Department)
   @JoinColumn()
   department: Department;
 
-  @ManyToOne(() => Grade, { nullable: false })
+  @ManyToOne(() => Grade)
   @JoinColumn()
   grade: Grade;
 
   @ManyToOne(() => Role, { nullable: false })
   @JoinColumn()
   role: Role;
-
-  public getSafeUser() {
-    const copy = { ...this };
-
-    delete copy.password;
-    delete copy.token;
-
-    return copy;
-  }
 }

@@ -23,9 +23,10 @@ export class SkillFormComponent {
     const name = this.skillForm.get('name')?.value;
 
     if (this.skillForm.valid && name) {
-      this.skillsService
-        .create$(name)
-        .subscribe((skill) => this.create.emit(skill));
+      this.skillsService.create$(name).subscribe((skill) => {
+        this.create.emit(skill);
+        this.skillForm.reset();
+      });
     } else {
       throw new Error('Name required!');
     }

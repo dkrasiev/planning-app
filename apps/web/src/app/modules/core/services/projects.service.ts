@@ -15,7 +15,9 @@ export class ProjectsService {
 
   private apiUrl: string = environment.apiUrl + '/projects';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.update();
+  }
 
   public getAll$() {
     return this.http.get<Project[]>(this.apiUrl).pipe(
