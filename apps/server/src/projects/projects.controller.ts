@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ProjectsService } from './projects.service';
@@ -17,6 +18,7 @@ export interface CreateProjectPayload {
   fullTitle: string;
 }
 
+@ApiTags('projects')
 @Controller('projects')
 @UseGuards(AuthGuard)
 export class ProjectsController {

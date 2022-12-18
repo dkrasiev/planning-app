@@ -7,12 +7,14 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CookieOptions, Request, Response } from 'express';
 import { LoginDto } from './dtos/login.dto';
 
 import { RegisterDto } from './dtos/register.dto';
 import { AuthService } from './services/auth.service';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   private cookieOptions: CookieOptions = {

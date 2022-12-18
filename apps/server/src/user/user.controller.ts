@@ -14,6 +14,7 @@ import { Department } from 'src/database/entities/department.entity';
 import { Grade } from 'src/database/entities/grade.entity';
 import { Role } from 'src/database/entities/role.entity';
 import { Skill } from 'src/database/entities/skill.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 export interface UpdateDto {
   firstName: string;
@@ -25,6 +26,7 @@ export interface UpdateDto {
   skills: Skill[];
 }
 
+@ApiTags('users')
 @Controller('users')
 @UseGuards(AuthGuard)
 export class UserController {

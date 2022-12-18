@@ -8,10 +8,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { SkillsService } from './skills.service';
 
+@ApiTags('skills')
 @Controller('skills')
 @UseGuards(AuthGuard)
 export class SkillsController {

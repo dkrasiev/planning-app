@@ -8,10 +8,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { GradesService } from './grades.service';
 
+@ApiTags('grade')
 @Controller('grades')
 export class GradesController {
   constructor(private gradesService: GradesService) {}

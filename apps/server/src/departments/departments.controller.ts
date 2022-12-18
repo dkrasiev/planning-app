@@ -8,10 +8,13 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { DepartmentsService } from './departments.service';
+import { DepartmentDto } from './dtos/department.dto';
 
+@ApiTags('departments')
 @Controller('departments')
 export class DepartmentsController {
   constructor(private departmentsService: DepartmentsService) {}
@@ -21,9 +24,9 @@ export class DepartmentsController {
     return await this.departmentsService.find();
   }
 
-  @Get('search')
-  async getByName(@Body() { name }: { name: string }) {
-    return await this.departmentsService.findByName(name);
+  @Get('search/:query')
+  async getByName(@Param('query') query: string) {
+    return await this.departmentsService.findByName(query);
   }
 
   @Get(':id')
@@ -39,7 +42,7 @@ export class DepartmentsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  async create(@Body() { name }: { name: string }) {
-    return await this.departmentsService.create(name);
+  async create(@Body() body: DepartmentDto) {
+    return await this.departmentsService.create(body.name);
   }
 }

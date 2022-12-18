@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { TokenService } from 'src/auth/services/token.service';
@@ -13,6 +14,7 @@ export interface CreatePayload {
   projectId: number;
 }
 
+@ApiTags('applications')
 @Controller('applications')
 @UseGuards(AuthGuard)
 export class ApplicationsController {
