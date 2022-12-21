@@ -15,7 +15,9 @@ export class DepartmentsService {
 
   private apiUrl: string = environment.apiUrl + '/departments';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.update();
+  }
 
   public update() {
     this.http

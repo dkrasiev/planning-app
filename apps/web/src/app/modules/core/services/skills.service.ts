@@ -13,7 +13,9 @@ export class SkillsService {
 
   private apiUrl: string = environment.apiUrl + '/skills';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.update();
+  }
 
   public update() {
     this.http

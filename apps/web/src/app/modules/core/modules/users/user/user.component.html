@@ -32,7 +32,11 @@
             [itemContent]="content"
           ></tui-data-list-wrapper>
         </tui-combo-box>
-        <tui-multi-select formControlName="skills" [stringify]="stringify">
+        <tui-multi-select
+          formControlName="skills"
+          [stringify]="stringify"
+          [identityMatcher]="idMatcher"
+        >
           Skills
           <tui-data-list-wrapper
             *tuiDataList

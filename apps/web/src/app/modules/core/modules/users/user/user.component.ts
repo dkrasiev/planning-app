@@ -126,8 +126,12 @@ export class UserComponent implements OnInit {
     this.isEdit = false;
   }
 
-  public stringify(item: { id: number; name: string }): string {
-    return item.name;
+  public stringify({ name }: { id: number; name: string }): string {
+    return name;
+  }
+
+  public idMatcher(a: { id: number }, b: { id: number }): boolean {
+    return a.id === b.id;
   }
 
   private resetUserForm() {
